@@ -1,0 +1,8 @@
+# Project vocabulary for Vale. One term per line, treated as a regex.
+
+# The project and its domain
+mera
+IMs?
+
+# British spelling, the house style
+[Cc]entr(?:e|es|ed|ing)
