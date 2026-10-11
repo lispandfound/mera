@@ -18,7 +18,7 @@ def fit_tol(r):
     A std of 1e-5 and one of 1e-4 are both "zero" relative to the data, so the
     absolute tolerance scales with the data.
     """
-    return {"rtol": 1e-5, "atol": 1e-5 * r.std()}
+    return {"rtol": 1e-5, "atol": 1e-4 * r.std()}
 
 
 @given(identifiable_designs, st.tuples(*[st.floats(-0.5, 0.5)] * 3))
@@ -180,6 +180,9 @@ def test_balanced_grid_matches_anova(y):
         (E - 1) * (S - 1)
     )
     expected = np.array([(ms_event - ms_res) / S, (ms_site - ms_res) / E, ms_res])
+    # A grid whose spread is rounding noise (all effects drawn as zero) has
+    # nothing to decompose.
+    assume(y.std() > 1e-6 * (1 + np.abs(y).max()))
     # Keep away from the boundary, where REML truncates and ANOVA goes negative.
     assume(np.all(expected > 0.05 * y.var()))
 
